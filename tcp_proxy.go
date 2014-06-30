@@ -10,16 +10,8 @@ type TCPConn struct {
 	src, dst net.Conn
 }
 
-func newTCPConn(t TestingT, src net.Conn, dstAddr string) *TCPConn {
-	cn := &TCPConn{t: t, src: src}
-
-	dst, err := net.Dial("tcp", dstAddr)
-	if err != nil {
-		t.Error(err)
-		return nil
-	}
-
-	cn.dst = dst
+func newTCPConn(t TestingT, src, dst net.Conn) *TCPConn {
+	cn := &TCPConn{t: t, src: src, dst: dst}
 
 	go cn.proxy(cn.src, cn.dst)
 	go cn.proxy(cn.dst, cn.src)
@@ -49,6 +41,11 @@ func NewTCPListener(t TestingT, listenAddr, dstAddr string) *TCPListener {
 }
 
 func (l *TCPListener) AcceptOne() <-chan *TCPConn {
+	dst, err := net.Dial("tcp", l.dstAddr)
+	if err != nil {
+		l.t.Fatal(err)
+	}
+
 	ch := make(chan *TCPConn)
 	go func() {
 		ln, err := net.Listen("tcp", l.listenAddr)
@@ -66,7 +63,7 @@ func (l *TCPListener) AcceptOne() <-chan *TCPConn {
 			l.t.Error(err)
 		}
 
-		ch <- newTCPConn(l.t, src, l.dstAddr)
+		ch <- newTCPConn(l.t, src, dst)
 		close(ch)
 	}()
 	return ch
