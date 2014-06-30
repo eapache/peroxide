@@ -5,6 +5,7 @@ import (
 	"net"
 )
 
+// TCPConn implements the Conn interface for TCP connections.
 type TCPConn struct {
 	t        TestingT
 	src, dst net.Conn
@@ -31,6 +32,7 @@ func (cn *TCPConn) Close() {
 	cn.dst.Close()
 }
 
+// TCPListener implements the Listener interface for the TCP protocol.
 type TCPListener struct {
 	t                   TestingT
 	listenAddr, dstAddr string
