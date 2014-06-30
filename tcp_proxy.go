@@ -15,7 +15,8 @@ func newTCPConn(t TestingT, src net.Conn, dstAddr string) *TCPConn {
 
 	dst, err := net.Dial("tcp", dstAddr)
 	if err != nil {
-		t.Fatal("proxy couldn't connect", err)
+		t.Error(err)
+		return nil
 	}
 
 	cn.dst = dst
@@ -52,17 +53,17 @@ func (l *TCPListener) AcceptOne() <-chan *TCPConn {
 	go func() {
 		ln, err := net.Listen("tcp", l.listenAddr)
 		if err != nil {
-			l.t.Fatal(err)
+			l.t.Error(err)
 		}
 
 		src, err := ln.Accept()
 		if err != nil {
-			l.t.Fatal(err)
+			l.t.Error(err)
 		}
 
 		err = ln.Close()
 		if err != nil {
-			l.t.Fatal(err)
+			l.t.Error(err)
 		}
 
 		ch <- newTCPConn(l.t, src, l.dstAddr)

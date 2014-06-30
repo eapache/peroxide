@@ -1,7 +1,7 @@
 package peroxide
 
 type TestingT interface {
-	Fatal(args ...interface{})
+	Error(args ...interface{})
 }
 
 type Conn interface {
