@@ -7,6 +7,8 @@ start/stop a proxy at will.
 */
 package peroxide
 
+import "net"
+
 // TestingT is an interface wrapping golang's built-in *testing.T.
 type TestingT interface {
 	Error(args ...interface{})
@@ -20,6 +22,6 @@ type Conn interface {
 
 // Listener is an interface for connection-oriented protocols like TCP.
 type Listener interface {
-	AcceptOne() <-chan *Conn
+	AcceptOne() (net.Addr, <-chan Conn)
 	Close()
 }
