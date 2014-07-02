@@ -37,10 +37,12 @@ type TCPListener struct {
 	listenAddr, dstAddr string
 }
 
+// NewTCPListener returns a new TCPListener for proxying connections between listenAddr and dstAddr.
 func NewTCPListener(t TestingT, listenAddr, dstAddr string) *TCPListener {
 	return &TCPListener{t: t, listenAddr: listenAddr, dstAddr: dstAddr}
 }
 
+// AcceptOne implements the Listener AcceptOne method.
 func (l *TCPListener) AcceptOne() (net.Addr, <-chan Conn) {
 	dst, err := net.Dial("tcp", l.dstAddr)
 	if err != nil {
@@ -72,5 +74,6 @@ func (l *TCPListener) AcceptOne() (net.Addr, <-chan Conn) {
 	return ln.Addr(), ch
 }
 
+// Close implements the Listener Close method.
 func (l *TCPListener) Close() {
 }

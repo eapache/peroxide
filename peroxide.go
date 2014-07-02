@@ -22,6 +22,10 @@ type Conn interface {
 
 // Listener is an interface for connection-oriented protocols like TCP.
 type Listener interface {
+	// AcceptOne tells the Listener to accept another connection for proxying. It returns the
+	// address on which it is expecting to accept that connection, and a channel on which it
+	// will send the resulting Conn object once the connection is established.
 	AcceptOne() (net.Addr, <-chan Conn)
+
 	Close()
 }
