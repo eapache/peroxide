@@ -1,6 +1,8 @@
 peroxide
 ========
 
+[![GoDoc](https://godoc.org/github.com/eapache/peroxide?status.png)](https://godoc.org/github.com/eapache/peroxide)
+
 Peroxide provides some simple proxy-server-like functions in golang to simplify
 testing reliable or redundant network services and bindings.
 
